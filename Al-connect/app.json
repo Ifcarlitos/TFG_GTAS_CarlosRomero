@@ -1,0 +1,32 @@
+{
+  "id": "721669f9-cff5-41e0-b3e6-de41db47c555",
+  "name": "MagtExtension",
+  "publisher": "Carlos_Romero",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "APP",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "20.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50899
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "9.2",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
