@@ -1,4 +1,4 @@
-pageextension 50100 "Employee Ext" extends "Employee Card"
+pageextension 60100 "Employee Ext" extends "Employee Card"
 {
 
     layout
@@ -18,41 +18,9 @@ pageextension 50100 "Employee Ext" extends "Employee Card"
             {
                 ApplicationArea = All;
                 CaptionML = ENU = 'Report Hours in Tasks', ESP = 'Reportar Horas en Tareas';
+                SubPageLink = "No." = FIELD("No.");
             }
         }
-
-        // addlast(General)
-        // {
-        //     usercontrol(ControlMarcajes; ControlMarcajes)
-        //     {
-        //         ApplicationArea = All;
-
-        //         trigger CrearApp()
-        //         var
-        //             rAsignarTarea: record "Recurso por Tarea";
-        //             vhtml: Text;
-        //             jsonDatos: JsonObject;
-        //         begin
-        //             clear(jsonDatos);
-        //             rAsignarTarea.Reset();
-        //             rAsignarTarea.SetRange("Nº empleado", Rec."No.");
-
-        //             vhtml := '<select class="form-select" id="SelectTarea">';
-
-        //             if rAsignarTarea.FindSet() then begin
-        //                 repeat
-        //                     vhtml += '<option attr-proyecto="' + rAsignarTarea.Proyecto + '" attr-tarea="' + rAsignarTarea.Tarea + '" value="' + rAsignarTarea.Proyecto + rAsignarTarea.Tarea + '">' + rAsignarTarea.Proyecto + '-' + rAsignarTarea.Tarea + '</option>';
-        //                 until rAsignarTarea.Next() = 0;
-        //             end;
-
-        //             vhtml += '</select>';
-
-        //             jsonDatos.Add('html', vhtml);
-
-        //             CurrPage.ControlMarcajes.definirMain(jsonDatos);
-        //         end;
-        //     }
-        //}
     }
 
     actions
@@ -68,11 +36,20 @@ pageextension 50100 "Employee Ext" extends "Employee Card"
                 trigger OnAction()
                 var
                     cuMgtMarcajes: Codeunit MgtMarcajes;
+                    rEmployee: Record Employee;
                 begin
-                    cuMgtMarcajes.CreateResourceByEmployee(Rec);
+                    rEmployee.Get(Rec."No.");
+                    cuMgtMarcajes.CreateResourceByEmployee(rEmployee);
                 end;
             }
         }
     }
+
+    trigger OnOpenPage()
+    var
+        myInt: Integer;
+    begin
+
+    end;
 
 }

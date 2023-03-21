@@ -24,7 +24,10 @@ controladdin ControlMarcajes
 
     event CrearApp()
 
-    procedure definirMain(Json: JsonObject);
-
+    procedure definirMain(Json: JsonArray);
+    procedure definirTareas(Json: JsonArray);
+    procedure LimpiarCampos();
+    event CargarTareas(Proyecto: Text);
     event RegistrarReporte(Horas: Text; Tarea: Text);
+
 }

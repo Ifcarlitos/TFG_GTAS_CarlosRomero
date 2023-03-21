@@ -1,4 +1,4 @@
-report 50100 "Tareas por Recurso"
+report 60100 "Tareas por Recurso"
 {
     ApplicationArea = All;
     Caption = 'Tareas por Recurso';

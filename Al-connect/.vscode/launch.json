@@ -6,14 +6,15 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "sandbox",
-            "startupObjectId": 22,
+            "environmentName": "Sandbox3",
+            "startupObjectId": 5201,
             "startupObjectType": "Page",
             "breakOnError": "All",
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
-            "schemaUpdateMode": "ForceSync"
+            "schemaUpdateMode": "ForceSync",
+            "tenant": "5f5f63d8-e0f2-4301-9e3e-8817644d3071"
         }
     ]
 }

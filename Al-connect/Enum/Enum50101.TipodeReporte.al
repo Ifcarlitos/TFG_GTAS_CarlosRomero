@@ -1,4 +1,4 @@
-enum 50101 "Tipo de Reporte"
+enum 60101 "Tipo de Reporte"
 {
     Extensible = true;
 

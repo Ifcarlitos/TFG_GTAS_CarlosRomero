@@ -1,17 +1,31 @@
 MainDiv = document.createElement("div");
 MainDiv.id = "MainDiv";
 
-function definirMain(JsonDatos){
+function definirMain(JsonDatosProyectos){
     vhtml= `
     <div class="container">
         <div class="row">
             <div class="col-sm">
-                Selecciona una Tarea
+                Selecciona un Proyecto:
             </div>
         </div>
         <div class="row">
             <div class="col-sm">
-                `+JsonDatos.html+`
+            <select onchange="changeJob(this)" class="form-select" id="SelectProyecto">
+                <option value="selectProyecto">Selecciona un Proyecto</option>
+            </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                Selecciona una Tarea:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+            <select onchange="changeAttr(this)" class="form-select" id="SelectTarea" disabled>
+                <option value="selectTarea">Selecciona una Tarea</option>
+            </select>
             </div>
         </div>
         <div class="row">
@@ -28,11 +42,60 @@ function definirMain(JsonDatos){
     MainSelect = vhtml;
     ParentDiv = document.getElementById("controlAddIn");
     ParentDiv.innerHTML = MainSelect;
+
+    //agregar datos al select de proyectos
+    var select = document.getElementById("SelectProyecto");
+    for (var i = 0; i < JsonDatosProyectos.length; i++) {
+        var opt = JsonDatosProyectos[i];
+        var el = document.createElement("option");
+        // `<option attr-proyecto="`+opt['Proyecto']+`" attr-tarea="`+opt['Tarea']+`" value="`+opt['id']+`">`+opt['Proyecto']+`-`+opt['Tarea']+`</option>`;
+        el.value = opt['Proyecto'];
+        el.textContent = opt['Proyecto']+`-`+opt['Description'];
+        el.setAttribute("attr-proyecto", opt['Proyecto']);
+        select.appendChild(el);
+    }
 }
 
-
-function changeAttr(obj){
+function changeJob(obj){
+    //borrar opciones del select de tareas menos la primera
+    var select = document.getElementById("SelectTarea");
+    var length = select.options.length;
+    for (i = length-1; i >= 1; i--) {
+        select.options[i] = null;
+    }
+    
     //alert(obj.value);
+    var arguments = [obj.value];
+    Microsoft.Dynamics.NAV.InvokeExtensibilityMethod('CargarTareas', arguments);
+}
+
+function definirTareas(jsonTareas){
+    //agregar datos al select de tareas
+    var select = document.getElementById("SelectTarea");
+    for(var i = 0; i < jsonTareas.length; i++) {
+        var opt = jsonTareas[i];
+        var el = document.createElement("option");
+        el.value = opt['Tarea'];
+        el.textContent = opt['Tarea']+`-`+opt['Description'];
+        el.setAttribute("attr-tarea", opt['Tarea']);
+        el.setAttribute("attr-proyecto", opt['Proyecto']);
+        select.appendChild(el);
+    }
+    //habilitar el select de tareas
+    document.getElementById("SelectTarea").disabled = false;
+}
+
+function LimpiarCampos(){
+    document.getElementById("horasRerporte").value = "";
+    document.getElementById("SelectTarea").value = "selectTarea";
+    document.getElementById("SelectProyecto").value = "selectProyecto";
+    //borrar opciones del select de tareas menos la primera
+    var select = document.getElementById("SelectTarea");
+    var length = select.options.length;
+    for (i = length-1; i >= 1; i--) {
+        select.options[i] = null;
+    }
+    document.getElementById("SelectTarea").disabled = true;
 }
 
 function RegistrarHoras(){
@@ -43,4 +106,5 @@ function RegistrarHoras(){
 
     Microsoft.Dynamics.NAV.InvokeExtensibilityMethod('RegistrarReporte', arguments);
 }
+
 

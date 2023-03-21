@@ -1,4 +1,4 @@
-table 50100 "Entradas y Salidas empleado"
+table 60100 "Entradas y Salidas empleado"
 {
     Caption = 'Entradas y Salidas empleado';
     DataClassification = ToBeClassified;

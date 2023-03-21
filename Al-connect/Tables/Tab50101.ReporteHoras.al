@@ -1,4 +1,4 @@
-table 50101 ReporteHoras
+table 60101 ReporteHoras
 {
     Caption = 'ReporteHoras';
     DataClassification = ToBeClassified;

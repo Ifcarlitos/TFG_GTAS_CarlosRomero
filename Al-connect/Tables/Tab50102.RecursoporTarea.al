@@ -1,4 +1,4 @@
-table 50102 "Recurso por Tarea"
+table 60102 "Recurso por Tarea"
 {
     Caption = 'Recurso por Tarea';
     DataClassification = ToBeClassified;
@@ -21,7 +21,7 @@ table 50102 "Recurso por Tarea"
         {
             Caption = 'Tarea';
             DataClassification = ToBeClassified;
-            TableRelation = "Job Task"."Job Task No.";
+            TableRelation = "Job Task"."Job Task No." where("Job No." = field(Proyecto));
         }
         field(4; id; Integer)
         {

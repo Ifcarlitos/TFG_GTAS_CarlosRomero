@@ -1,4 +1,4 @@
-tableextension 50101 "Resource Ext" extends Resource
+tableextension 60101 "Resource Ext" extends Resource
 {
     fields
     {

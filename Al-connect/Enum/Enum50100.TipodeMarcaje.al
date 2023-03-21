@@ -1,4 +1,4 @@
-enum 50100 "Tipo de Marcaje"
+enum 60100 "Tipo de Marcaje"
 {
     Extensible = true;
 

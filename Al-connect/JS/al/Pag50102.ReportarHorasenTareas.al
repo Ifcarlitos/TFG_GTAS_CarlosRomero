@@ -1,4 +1,4 @@
-page 50102 "Reportar Horas en Tareas"
+page 60102 "Reportar Horas en Tareas"
 {
     Caption = 'Reportar Horas en Tareas';
     SourceTable = Employee;
@@ -17,43 +17,101 @@ page 50102 "Reportar Horas en Tareas"
 
                     trigger CrearApp()
                     var
+                        jsonDatos: JsonObject;
+                        jsonArrayRecursoPorTarea: JsonArray;
+
+                        jsonArrayRecursoPorProyecto: JsonArray;
                     begin
-                        CrearInicio();
+                        jsonArrayRecursoPorProyecto := ListaRecursosPorProyecto();
+                        //jsonArrayRecursoPorTarea := ListaRecursosPorTarea();
+                        CurrPage.ControlMarcajes.definirMain(jsonArrayRecursoPorProyecto);
+                    end;
+
+                    trigger CargarTareas(Proyecto: Text)
+                    var
+                        jsonDatos: JsonObject;
+                        jsonArrayRecursoPorTarea: JsonArray;
+                    begin
+                        jsonArrayRecursoPorTarea := ListaRecursosPorTarea(Proyecto);
+                        CurrPage.ControlMarcajes.definirTareas(jsonArrayRecursoPorTarea);
                     end;
 
                     trigger RegistrarReporte(Horas: Text; Tarea: Text)
                     var
+                        jsonDatos: JsonObject;
+                        jsonArrayRecursoPorProyecto: JsonArray;
+                        pEmployeeCard: Page "Employee Card";
                     begin
-                        Message('Horas: ' + Horas + ' Tarea: ' + Tarea);
-                        CrearInicio();
+                        //CurrPage.ControlMarcajes.LimpiarCampos();
                     end;
                 }
             }
         }
     }
 
-    procedure CrearInicio()
+    procedure ListaRecursosPorTarea(proyecto: Text): JsonArray
     var
         rAsignarTarea: record "Recurso por Tarea";
         vhtml: Text;
         jsonDatos: JsonObject;
+        jsonArrayRecursoPorTarea: JsonArray;
+        rJobTask: Record "Job Task";
     begin
         clear(jsonDatos);
         rAsignarTarea.Reset();
         rAsignarTarea.SetRange("Nº empleado", Rec."No.");
+        rAsignarTarea.SetRange("Proyecto", proyecto);
 
-        vhtml := '<select onchange="changeAttr(this)" class="form-select" id="SelectTarea">';
+        Clear(jsonArrayRecursoPorTarea);
+
+        jsonDatos.Add('Proyecto', '');
+        jsonDatos.Add('Tarea', '');
+        jsonDatos.Add('id', '');
+        jsonDatos.Add('Description', '');
 
         if rAsignarTarea.FindSet() then begin
             repeat
-                vhtml += '<option attr-proyecto="' + rAsignarTarea.Proyecto + '" attr-tarea="' + rAsignarTarea.Tarea + '" value="' + Format(rAsignarTarea.id) + '">' + rAsignarTarea.Proyecto + '-' + rAsignarTarea.Tarea + '</option>';
+                jsonDatos.Replace('Proyecto', rAsignarTarea."Proyecto");
+                jsonDatos.Replace('Tarea', rAsignarTarea."Tarea");
+                jsonDatos.Replace('id', rAsignarTarea."id");
+                if rJobTask.Get(rAsignarTarea."Proyecto", rAsignarTarea."Tarea") then jsonDatos.Replace('Description', rJobTask.Description);
+                jsonArrayRecursoPorTarea.Add(jsonDatos.Clone());
             until rAsignarTarea.Next() = 0;
         end;
+        exit(jsonArrayRecursoPorTarea);
+    end;
 
-        vhtml += '</select>';
+    procedure ListaRecursosPorProyecto(): JsonArray
+    var
+        rAsignarTarea: record "Recurso por Tarea";
+        vhtml: Text;
+        jsonDatos: JsonObject;
+        jsonArrayRecursoPorProyecto: JsonArray;
 
-        jsonDatos.Add('html', vhtml);
+        vProyectoAnterior: Text;
+        rJob: Record Job;
+    begin
+        clear(jsonDatos);
+        rAsignarTarea.Reset();
+        rAsignarTarea.SetRange("Nº empleado", Rec."No.");
+        rAsignarTarea.SetCurrentKey("Proyecto");
 
-        CurrPage.ControlMarcajes.definirMain(jsonDatos);
+        Clear(jsonArrayRecursoPorProyecto);
+
+        jsonDatos.Add('Proyecto', '');
+        jsonDatos.Add('Description', '');
+
+        vProyectoAnterior := '';
+        if rAsignarTarea.FindSet() then begin
+            repeat
+                if vProyectoAnterior <> rAsignarTarea."Proyecto" then begin
+                    vProyectoAnterior := rAsignarTarea."Proyecto";
+                    jsonDatos.Replace('Proyecto', rAsignarTarea."Proyecto");
+                    if rJob.Get(rAsignarTarea."Proyecto") then jsonDatos.Replace('Description', rJob.Description);
+                    jsonArrayRecursoPorProyecto.Add(jsonDatos.Clone());
+                end;
+            until rAsignarTarea.Next() = 0;
+        end;
+        exit(jsonArrayRecursoPorProyecto);
     end;
 }

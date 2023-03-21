@@ -1,6 +1,6 @@
 {
   "id": "721669f9-cff5-41e0-b3e6-de41db47c555",
-  "name": "MagtExtension",
+  "name": "MgtExtension",
   "publisher": "Carlos_Romero",
   "version": "1.0.0.0",
   "brief": "",
@@ -16,8 +16,8 @@
   "application": "20.0.0.0",
   "idRanges": [
     {
-      "from": 50100,
-      "to": 50899
+      "from": 60100,
+      "to": 60899
     }
   ],
   "resourceExposurePolicy": {

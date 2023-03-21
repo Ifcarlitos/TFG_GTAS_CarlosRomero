@@ -1,4 +1,4 @@
-page 50101 "Asignar Tareas"
+page 60101 "Asignar Tareas"
 {
     ApplicationArea = All;
     Caption = 'Asignar Tareas';

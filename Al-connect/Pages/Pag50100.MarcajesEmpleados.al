@@ -1,4 +1,4 @@
-page 50100 "Marcajes Empleados"
+page 60100 "Marcajes Empleados"
 {
     ApplicationArea = All;
     Caption = 'Marcajes Empleados';
