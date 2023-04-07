@@ -101,8 +101,9 @@ function LimpiarCampos(){
 function RegistrarHoras(){
     var horas = document.getElementById("horasRerporte").value;
     var tarea = $("#SelectTarea").val();
+    var proyecto = $("#SelectProyecto").val();
 
-    arguments = [horas, tarea];
+    arguments = [horas, tarea, proyecto];
 
     Microsoft.Dynamics.NAV.InvokeExtensibilityMethod('RegistrarReporte', arguments);
 }

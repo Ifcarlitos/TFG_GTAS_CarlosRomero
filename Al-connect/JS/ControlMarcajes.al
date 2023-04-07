@@ -28,6 +28,6 @@ controladdin ControlMarcajes
     procedure definirTareas(Json: JsonArray);
     procedure LimpiarCampos();
     event CargarTareas(Proyecto: Text);
-    event RegistrarReporte(Horas: Text; Tarea: Text);
+    event RegistrarReporte(Horas: Text; Tarea: Text; Proyecto: text);
 
 }

@@ -36,14 +36,99 @@ page 60102 "Reportar Horas en Tareas"
                         CurrPage.ControlMarcajes.definirTareas(jsonArrayRecursoPorTarea);
                     end;
 
-                    trigger RegistrarReporte(Horas: Text; Tarea: Text)
-                    var
-                        jsonDatos: JsonObject;
-                        jsonArrayRecursoPorProyecto: JsonArray;
-                        pEmployeeCard: Page "Employee Card";
-                    begin
-                        //CurrPage.ControlMarcajes.LimpiarCampos();
-                    end;
+                    trigger RegistrarReporte(Horas: Text; Tarea: Text; Proyecto: text)
+                    VAR
+                        tJobTask: Record 1001;
+                        tJob: Record 167;
+                        vBolsaHoras: Decimal;
+                        vLinea: Integer;
+                        vCustomer: Text;
+                        rutaPdf: Text;
+                        vDocumentNo: Text;
+                        tJobsSetup: Record 315;
+                        NoSeriesMgt: Codeunit 396;
+                        rDiarioProyecto: Record "Job Journal Line";
+                        tJobJournalLine: Record "Job Journal Line";
+                        rEmployee: Record Employee;
+                        rResource: Record Resource;
+
+                        //pResource: Text; pProjectNo: Text; 
+                        //pTaskNo: Text; pDate: Date; pHours: Decimal; pComments: Text; 
+                        jsonInput: JsonObject;
+                        jsonTokenEmpleado: JsonToken;
+                        jsonTokenProyecto: JsonToken;
+                        jsonTokenTarea: JsonToken;
+                        jsonTokenFecha: JsonToken;
+                        jsonTokenHoras: JsonToken;
+                        jsonTokenComentarios: JsonToken;
+
+                        Nempleoyee: Text;
+                        vproyecto: Text;
+                        vtarea: Text;
+                        vfecha: Date;
+                        fechatxt: Text;
+                        vhoras: Decimal;
+                        comentarios: Text;
+                    BEGIN
+
+
+                        Nempleoyee := Rec."No.";
+
+
+                        vproyecto := Proyecto;
+
+
+                        vtarea := Tarea;
+
+
+                        vfecha := today();
+
+
+                        Evaluate(vhoras, Horas);
+
+
+                        comentarios := '';
+
+                        tJobJournalLine.reset();
+                        IF tJobJournalLine.FINDLAST THEN
+                            vLinea := tJobJournalLine."Line No." + 10000
+                        ELSE
+                            vLinea := 10000;
+
+                        rDiarioProyecto.reset();
+                        rDiarioProyecto.SetCurrentKey("Line No.");
+                        if rDiarioProyecto.findlast() then begin
+                            vLinea := rDiarioProyecto."Line No." + 10000;
+                        end else begin
+                            vLinea := 10000;
+                        end;
+
+                        vBolsaHoras := 0;
+
+                        IF vBolsaHoras > 0 THEN
+                            tJobJournalLine."Line Type" := tJobJournalLine."Line Type"::Budget
+                        ELSE
+                            tJobJournalLine."Line Type" := tJobJournalLine."Line Type"::Billable;
+
+                        tJobJournalLine.VALIDATE("Journal Template Name", 'PROYECTO');
+                        tJobJournalLine.VALIDATE("Journal Batch Name", 'GENERICO');
+                        tJobJournalLine.VALIDATE("Line No.", vLinea);
+                        tJobJournalLine.VALIDATE("Job No.", vproyecto);
+                        tJobJournalLine.VALIDATE("Job Task No.", vtarea);
+                        tJobJournalLine.VALIDATE("Posting Date", vfecha);
+                        tJobJournalLine.Type := tJobJournalLine.Type::Resource;
+                        tJobJournalLine.VALIDATE("No.", Nempleoyee);
+                        tJobJournalLine.VALIDATE(Quantity, vhoras);
+                        tJobJournalLine.Description := COPYSTR(comentarios, 1, 50);
+                        tJobsSetup.GET;
+                        vDocumentNo := NoSeriesMgt.GetNextNo(tJobsSetup."Job Nos.", TODAY, TRUE);
+                        tJobJournalLine.VALIDATE("Document No.", vDocumentNo);
+
+                        tJobJournalLine.INSERT(TRUE);
+                        IF tJob.GET(tJobJournalLine."Job No.") THEN BEGIN
+                            CurrPage.Update();
+                        END;
+                    END;
                 }
             }
         }
