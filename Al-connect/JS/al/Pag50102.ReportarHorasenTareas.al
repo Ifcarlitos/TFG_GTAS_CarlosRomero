@@ -4,6 +4,7 @@ page 60102 "Reportar Horas en Tareas"
     SourceTable = Employee;
     UsageCategory = Administration;
     PageType = CardPart;
+    applicationArea = All;
 
     layout
     {
@@ -207,4 +208,5 @@ page 60102 "Reportar Horas en Tareas"
         //jsonArrayRecursoPorTarea := ListaRecursosPorTarea();
         CurrPage.ControlMarcajes.definirMain(jsonArrayRecursoPorProyecto);
     end;
+
 }
