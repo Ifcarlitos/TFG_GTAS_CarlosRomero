@@ -69,24 +69,20 @@ page 60102 "Reportar Horas en Tareas"
                         fechatxt: Text;
                         vhoras: Decimal;
                         comentarios: Text;
-                    BEGIN
+                        jsonDatos: JsonObject;
+                        jsonArrayRecursoPorTarea: JsonArray;
 
+                        jsonArrayRecursoPorProyecto: JsonArray;
+                    BEGIN
+                        jsonArrayRecursoPorProyecto := ListaRecursosPorProyecto();
+                        //jsonArrayRecursoPorTarea := ListaRecursosPorTarea();
+                        CurrPage.ControlMarcajes.definirMain(jsonArrayRecursoPorProyecto);
 
                         Nempleoyee := Rec."No.";
-
-
                         vproyecto := Proyecto;
-
-
                         vtarea := Tarea;
-
-
                         vfecha := today();
-
-
                         Evaluate(vhoras, Horas);
-
-
                         comentarios := '';
 
                         tJobJournalLine.reset();
@@ -110,7 +106,7 @@ page 60102 "Reportar Horas en Tareas"
                         ELSE
                             tJobJournalLine."Line Type" := tJobJournalLine."Line Type"::Billable;
 
-                        tJobJournalLine.VALIDATE("Journal Template Name", 'PROYECTO');
+                        tJobJournalLine.VALIDATE("Journal Template Name", 'PROY');
                         tJobJournalLine.VALIDATE("Journal Batch Name", 'GENERICO');
                         tJobJournalLine.VALIDATE("Line No.", vLinea);
                         tJobJournalLine.VALIDATE("Job No.", vproyecto);
@@ -126,7 +122,7 @@ page 60102 "Reportar Horas en Tareas"
 
                         tJobJournalLine.INSERT(TRUE);
                         IF tJob.GET(tJobJournalLine."Job No.") THEN BEGIN
-                            CurrPage.Update();
+                            //CurrPage.Update();
                         END;
                     END;
                 }
@@ -198,5 +194,17 @@ page 60102 "Reportar Horas en Tareas"
             until rAsignarTarea.Next() = 0;
         end;
         exit(jsonArrayRecursoPorProyecto);
+    end;
+
+    trigger OnPageBackgroundTaskError(TaskId: Integer; ErrorCode: Text; ErrorText: Text; ErrorCallStack: Text; var IsHandled: Boolean)
+    var
+        jsonDatos: JsonObject;
+        jsonArrayRecursoPorTarea: JsonArray;
+
+        jsonArrayRecursoPorProyecto: JsonArray;
+    begin
+        jsonArrayRecursoPorProyecto := ListaRecursosPorProyecto();
+        //jsonArrayRecursoPorTarea := ListaRecursosPorTarea();
+        CurrPage.ControlMarcajes.definirMain(jsonArrayRecursoPorProyecto);
     end;
 }

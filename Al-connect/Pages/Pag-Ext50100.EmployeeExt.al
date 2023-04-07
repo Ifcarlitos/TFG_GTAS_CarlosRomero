@@ -25,13 +25,14 @@ pageextension 60100 "Employee Ext" extends "Employee Card"
 
     actions
     {
-        addafter("Co&mments")
+        addlast(Processing)
         {
             action(CreateResource)
             {
                 ApplicationArea = All;
                 Caption = 'Crear Recurso';
                 Image = Create;
+                Promoted = true;
 
                 trigger OnAction()
                 var
@@ -40,6 +41,24 @@ pageextension 60100 "Employee Ext" extends "Employee Card"
                 begin
                     rEmployee.Get(Rec."No.");
                     cuMgtMarcajes.CreateResourceByEmployee(rEmployee);
+                end;
+            }
+            action(AsignarTarea)
+            {
+                ApplicationArea = All;
+                Caption = 'Asignar Tarea';
+                Image = Task;
+                Promoted = true;
+
+                trigger OnAction()
+                var
+                    pAsignarTarea: Page "Asignar Tareas";
+                    rRecursoPorTarea: Record "Recurso por Tarea";
+                begin
+                    rRecursoPorTarea.Reset();
+                    rRecursoPorTarea.SetRange("Nº empleado", Rec."No.");
+                    pAsignarTarea.SetTableView(rRecursoPorTarea);
+                    pAsignarTarea.run();
                 end;
             }
         }

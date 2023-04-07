@@ -501,7 +501,7 @@ codeunit 60100 MgtMarcajes
         ELSE
             tJobJournalLine."Line Type" := tJobJournalLine."Line Type"::Billable;
 
-        tJobJournalLine.VALIDATE("Journal Template Name", 'PROYECTO');
+        tJobJournalLine.VALIDATE("Journal Template Name", 'PROY');
         tJobJournalLine.VALIDATE("Journal Batch Name", 'GENERICO');
         tJobJournalLine.VALIDATE("Line No.", vLinea);
         tJobJournalLine.VALIDATE("Job No.", proyecto);
