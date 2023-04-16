@@ -1,3 +1,24 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Microsoft cloud sandbox",
+//             "request": "launch",
+//             "type": "al",
+//             "environmentType": "Sandbox",
+//             "environmentName": "Sandbox3",
+//             "startupObjectId": 5201,
+//             "startupObjectType": "Page",
+//             "breakOnError": "All",
+//             "launchBrowser": true,
+//             "enableLongRunningSqlStatements": true,
+//             "enableSqlInformationDebugger": true,
+//             "schemaUpdateMode": "ForceSync",
+//             "tenant": "5f5f63d8-e0f2-4301-9e3e-8817644d3071"
+//         }
+//     ]
+// }
+
 {
     "version": "0.2.0",
     "configurations": [
@@ -5,8 +26,10 @@
             "name": "Microsoft cloud sandbox",
             "request": "launch",
             "type": "al",
-            "environmentType": "Sandbox",
-            "environmentName": "Sandbox3",
+            "environmentType": "OnPrem",
+            "server": "http://bcserver/",
+            "serverInstance": "BC",
+            "authentication": "UserPassword",
             "startupObjectId": 5201,
             "startupObjectType": "Page",
             "breakOnError": "All",
@@ -14,7 +37,7 @@
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
             "schemaUpdateMode": "ForceSync",
-            "tenant": "5f5f63d8-e0f2-4301-9e3e-8817644d3071"
+            "tenant": "default"
         }
     ]
 }
